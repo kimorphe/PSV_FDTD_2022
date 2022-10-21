@@ -7,27 +7,54 @@
 <center>
 	<h2>2D-FDTD for P-SV waves</h2>
 </center>
-<h3>C/C++ Source</h3>
+<h3>C/C++ Source (./Src)</h3>
 <ul>
-	<li> Header file 1 <a href="fdm2d.h">fdm2d.h</a></li>
-	<li> Header file 2 <a href="crack.h">crack.h</a></li>
-	<li> メイン関数 <a href="main.cpp">main.cpp</a></li>
-	<li> 領域設定<a href="domain.cpp">domain.cpp</a></li>
-	<li> 波動場, 格子系<a href="field.cpp">field.cpp</a></li>
-	<li> PML領域 <a href="PML.cpp">PML.cpp</a></li>
-	<li> 初期条件 <a href="icon.cpp">icon.cpp</a></li>
-	<li> レシーバ <a href="recs.cpp">recs.cpp</a></li>
-	<li> ソース <a href="source.cpp">source.cpp</a></li>
-	<li> index,座標の変換 <a href="indx_cod.cpp">indx_cod.cpp</a></li>
-	<li> 波形データ <a href="InWv.cpp">InWv.cpp</a></li>
-	<li> 複素数クラス <a href="cmplx.cpp">cmplx.cpp</a></li>
-	<li> き裂関係データ <a href="COD.cpp">COD.cpp</a></li>
-	<li> き裂関連量の更新 <a href="crack.cpp">crack.cpp</a></li>
+	<li> Header file 1 (fdm2d.h) <a href="Src/fdm2d.h"> >></a></li>
+	<li> Header file 2 (crack.h) <a href="Src/crack.h"> >></a></li>
+
+	<li> メイン関数 (main.cpp) <a href="Src/main.cpp"> >></a></li>
+	<li> 領域設定 (domain.cpp) <a href="Src/domain.cpp"> >></a></li>
+	<li> 波動場, 格子系 (field.cpp) <a href="Src/field.cpp"> >></a></li>
+	<li> PML領域 (PML.cpp) <a href="Src/PML.cpp"> >></a></li>
+	<li> 初期条件 (icon.cpp) )<a href="Src/icon.cpp"> >></a></li>
+	<li> レシーバ (recs.cpp) <a href="Src/recs.cpp"> >></a></li>
+	<li> ソース (source.cpp) <a href="Src/source.cpp"> >></a></li>
+	<li> index,座標の変換 (indx_cod.cpp) <a href="Src/indx_cod.cpp"> >></a></li>
+	<li> 波形データ (InWv.cpp) <a href="Src/InWv.cpp"> >></a></li>
+	<li> 複素数クラス (cmplx.cpp) <a href="Src/cmplx.cpp"> >></a></li>
+	<li> き裂関係データ (COD.cpp) <a href="Src/COD.cpp"> >></a></li>
+	<li> き裂関連量の更新 (crack.cpp) <a href="Src/crack.cpp"> >></a></li>
+
+	<li> 外形線データの抽出 (bnd.cpp)<a href="Src/bnd.cpp"> >></a></li>
+	<li> 外形線データの抽出(PMLを除外) (bnd_tight.cpp) <a href="Src/bnd_tight.cpp"> >></a></li>
+	<li> 余盛り形状作成のクラス(debug用) (butt_weld.cpp)<a href="Src/butt_weld.cpp"> >></a></li>
+	<li> Rayleigh波速度の計算 (rayleight.cpp)<a href="Src/rayleigh.cpp"> >></a></li>
+	<li> 入射波形表示の波形データ出力 (plot_inwv.cpp)<a href="Src/plot_inwv.cpp"> >></a></li>
+
 </ul>
+<h3>Shell Scripts</h3>
+	<ul>
+		<li> GitHub登録 (git_cmd.sh)<a href="git_cmd.sh"> >> </a> </li>
+	</ul>
+<h3>Python Scripts</h3>
+	<ul>
+		<li> モデル外形線の表示 (bnd.py)<a href="bnd.py"> >> </a> </li>
+		<li> snapshotのpng画像作成 (mkfig_vsnap.py)<a href="mkfig_vsnap.py"> >> </a> </li>
+	</ul>
 <h3>Input Data</h3>
-	<li>領域データ<a href="Demo1/geom.inp">Demo1/geom.inp</a></li>	
-	<li>初期条件<a href="Demo1/icon.inp">Demo1/icon.inp</a></li>	
-	<li>送信条件<a href="Demo1/src.inp">Demo1/src.inp</a></li>	
-	<li>入射波形<a href="Demo1/inwv0.dat">Demo1/inwv0.dat</a></li>	
+<h4>./Demo1<h4>
+	<ul>
+	<li>領域データ (geom.inp) <a href="Demo1/geom.inp"> >></a></li>	
+	<li>初期条件 (icon.inp) <a href="Demo1/icon.inp"> >></a></li>	
+	<li>送信条件 (src.inp) <a href="Demo1/src.inp"> >></a></li>	
+	<li>入射波形 (inwv0.dat) <a href="Demo1/inwv0.dat"> >></a></li>	
+	</ul>
 </body>
+<h3>Reference</h3>
+<ol>
+	<li> 
+		Ricker波[文献]"Ricker, Ormsby, Klauder, Butterworth -A choice of wavelemts" 
+		<a href="https://web.archive.org/web/20141227215059/http://74.3.176.63/publications/recorder/1994/09sep/sep94-choice-of-wavelets.pdf"> >> </a>
+	</li>
+<ol>
 </html>

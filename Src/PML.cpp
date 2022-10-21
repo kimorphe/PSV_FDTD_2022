@@ -417,3 +417,89 @@ void PML :: s2v(double rho, double dt){
 };
 
 //----------------------------------------------------
+
+void PML :: damp(char dir_name[128],int ipml,int isum){
+	int i,j;
+	char fname[128];
+	sprintf(fname,"%s/pml%d_%d.dat",dir_name,isum,ipml);
+	FILE *fp=fopen(fname,"w");
+	fprintf(fp,"# Ndiv=%d %d\n",nx[0]-1,nx[1]-1);
+
+	PML::gridNum(0);
+	fprintf(fp,"# v1: Nx=%d %d\n",Nx[0],Nx[1]);
+	for(i=0;i<Nx[0];i++){
+	for(j=0;j<Nx[1];j++){
+		fprintf(fp,"%le, %le\n",v1p[i][j],v1v[i][j]);
+	}
+	}
+	PML::gridNum(1);
+	fprintf(fp,"# v2: Nx=%d %d\n",Nx[0],Nx[1]);
+	for(i=0;i<Nx[0];i++){
+	for(j=0;j<Nx[1];j++){
+		fprintf(fp,"%le, %le\n",v2p[i][j],v2v[i][j]);
+	}
+	}
+	PML::gridNum(2);
+	fprintf(fp,"# s11,s22: Nx=%d %d\n",Nx[0],Nx[1]);
+	for(i=0;i<Nx[0];i++){
+	for(j=0;j<Nx[1];j++){
+		fprintf(fp,"%le, %le, %le, %le\n",s11p[i][j],s11v[i][j],s22p[i][j],s22v[i][j]);	
+	}
+	}
+	PML::gridNum(2);
+	fprintf(fp,"# s12: Nx=%d %d\n",Nx[0],Nx[1]);
+	for(i=0;i<Nx[0];i++){
+	for(j=0;j<Nx[1];j++){
+		fprintf(fp,"%le, %le\n",s12p[i][j],s12v[i][j]);
+	}
+	}
+	fclose(fp);
+};
+void PML :: import(int ipml,int isum){
+	int i,j;
+	char fname[128];
+	sprintf(fname,"Rst/pml%d_%d.dat",isum,ipml);
+	FILE *fp=fopen(fname,"r");
+	char cbff[128];
+	if(fp==NULL){
+		printf("file %s not found !! --> abort process\n",fname);
+	};
+
+	printf("    %s\n",fname);
+	fgets(cbff,128,fp); // Ndiv[0:1]
+
+	PML::gridNum(0);
+	fgets(cbff,128,fp); // v1: Nx[0:1]
+	for(i=0;i<Nx[0];i++){
+	for(j=0;j<Nx[1];j++){
+		fscanf(fp,"%le, %le\n",v1p[i]+j,v1v[i]+j);
+		v1[i][j]=v1p[i][j]+v1v[i][j];
+	}
+	}
+	PML::gridNum(1);
+	fgets(cbff,128,fp); // v2: Nx[0:1]
+	for(i=0;i<Nx[0];i++){
+	for(j=0;j<Nx[1];j++){
+		fscanf(fp,"%le, %le\n",v2p[i]+j,v2v[i]+j);
+		v2[i][j]=v2p[i][j]+v2v[i][j];
+	}
+	}
+	PML::gridNum(2);
+	fgets(cbff,128,fp); // s11,s22: Nx[0:1]
+	for(i=0;i<Nx[0];i++){
+	for(j=0;j<Nx[1];j++){
+		fscanf(fp,"%le, %le, %le, %le\n",s11p[i]+j,s11v[i]+j,s22p[i]+j,s22v[i]+j);	
+		s11[i][j]=s11p[i][j]+s11v[i][j];
+		s22[i][j]=s22p[i][j]+s22v[i][j];
+	}
+	}
+	PML::gridNum(2);
+	fgets(cbff,128,fp); // s12: Nx[0:1]
+	for(i=0;i<Nx[0];i++){
+	for(j=0;j<Nx[1];j++){
+		fscanf(fp,"%le, %le\n",s12p[i]+j,s12v[i]+j);
+		s12[i][j]=s12p[i][j]+s12v[i][j];
+	}
+	}
+	fclose(fp);
+};
