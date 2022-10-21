@@ -1,0 +1,14 @@
+# wave type (0: zero, 1:sin 2:cos )
+ 2
+# Nt (number of data)
+ 20000 
+# T0, nbrst (fundamental period, burst cycles)
+ 0.2 2
+# kn (narrowness factor for Gaussian amplitude modulation)
+ 4
+# t1, t2
+ 0.0 60.0
+# amp (read only when negatie wave type is specified)
+
+# Nt (number of data)
+ 15000 

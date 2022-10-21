@@ -1,0 +1,12 @@
+# init (0:zero field, 1:plane wave)
+ 0
+# ain ( incident angle [deg])
+ 90.0
+# wave type (0:L-wave, 1:S-wave)
+ 1
+# xp0 (zero phase point)
+ 0.0 0.0
+# waveform number
+ 0
+# pre-stress (s11, s22)
+ 0.0 0.0

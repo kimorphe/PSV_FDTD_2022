@@ -1,0 +1,17 @@
+# is_sync? (0:yes, 1:no)
+ 1
+# dly_seq (0:steering, 1:focusing)
+ 0
+# nsrc
+ 1
+# grid_type(0:v1, 1:v2, 3:s12), field type(0:stress, 1:velocity)
+ 1 0
+# Xsa Xsb
+ 4.5  11.999
+ 5.5  11.999
+# wvID numbering (-1:sequential, otherwise: constant)
+ 0
+
+##InDir (incident direction[deg], wave type: P=0, S=1)
+ -90.0 1
+##END
