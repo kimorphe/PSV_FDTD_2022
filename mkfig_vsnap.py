@@ -5,7 +5,38 @@ import bnd
 import matplotlib.ticker
 
 from mpl_toolkits.axes_grid1.axes_divider import make_axes_locatable
+from matplotlib.colors import ListedColormap
+import copy
 
+class Mask:
+    def load(self,fname):
+        fp=open(fname,"r")
+
+        fp.readline()   # comment line
+        dat=fp.readline()
+        dat=dat.strip().split(" ");
+        xlim=[ float(dat[0]),float(dat[1])];
+
+        fp.readline()   # comment line
+        dat=fp.readline()
+        dat=dat.strip().split(" ");
+        ylim=[float(dat[0]),float(dat[1])];
+
+        fp.readline()   # comment line
+        dat=fp.readline()
+        dat=dat.strip().split(" ");
+        Ndiv=[int(dat[0]),int(dat[1])]
+        fp.readline()
+
+        mk=fp.readlines()
+        mk=np.array(mk)
+        mk=mk.astype(int)
+        mk=np.reshape(mk,Ndiv)
+
+        self.mk=np.transpose(mk)
+        print(np.shape(mk))
+
+        fp.close()
 class Vfld:
 	def __init__(self,fname):
 		fp=open(fname,"r");
@@ -45,40 +76,25 @@ class Vfld:
 		self.v1=np.transpose(self.v1)
 		self.v2=np.transpose(self.v2)
 		self.v=np.sqrt(self.v1*self.v1+self.v2*self.v2);
-	def draw0(self):
-		fig=plt.figure();
-		indx=np.arange(self.Ng[1],0,-1)-1;
-		for k in range(self.Ng[0]):
-			self.v1[k]=self.v1[k][indx];
-			self.v2[k]=self.v2[k][indx];
-		self.v1=np.transpose(self.v1)
-		self.v2=np.transpose(self.v2)
-
+	def draw1(self,ax,vmin=-1.e-08,vmax=0.01,cmap="nipy_spectral",Fac=1):
 		rng=[self.xlim[0],self.xlim[1],self.ylim[0], self.ylim[1]];
-		ax1=fig.add_subplot(1,2,1)
-		cax1=ax1.imshow(self.v1,extent=rng,vmin=-0.6,vmax=0.6,cmap="jet");
-		plt.colorbar(cax1,orientation='horizontal')
-
-		ax2=fig.add_subplot(1,2,2)
-		cax2=ax2.imshow(self.v2,extent=rng,vmin=-0.1,vmax=0.1,cmap="jet");
-		plt.colorbar(cax2,orientation='horizontal')
-
-		ax1.set_xlabel("x")
-		ax2.set_xlabel("x")
-		ax1.set_ylabel("y")
-		ax1.set_title("v1")
-		ax2.set_title("v2")
-	def draw1(self,ax,vmin=0.0,vmax=0.01,cmap="nipy_spectral",Fac=1):
-		rng=[self.xlim[0],self.xlim[1],self.ylim[0], self.ylim[1]];
-		V=np.sqrt(self.v1*self.v1+self.v2*self.v2);
-		img=ax.imshow(V*Fac,extent=rng,vmin=vmin,vmax=vmax,cmap=cmap,origin="lower",rasterized=True);
-
+		V=np.sqrt(self.v1*self.v1+self.v2*self.v2)+1.e-08;
+		my_cmap=plt.cm.jet
+		my_cmap=copy.copy(plt.cm.get_cmap("jet"))
+		#my_cmap.set_over("w")
+		my_cmap.set_under("k")
+		#img=ax.imshow(V*Fac,extent=rng,vmin=vmin,vmax=vmax,cmap=my_cmap,origin="lower",rasterized=True);
+		img=ax.imshow(V*Fac,extent=rng,vmin=vmin,vmax=vmax,cmap=my_cmap,origin="lower",rasterized=False);
 		ax.set_xlabel("x[mm]",fontsize=12)
 		ax.set_ylabel("y[mm]",fontsize=12)
 		return(img)
 
 
 if __name__=="__main__":
+
+    vmsk=Mask()
+    vmsk.load("vmask.dat")
+
     dir_name="./"
     #geom=bnd.Crv(dir_name+"bnd.out")
 
@@ -99,8 +115,9 @@ if __name__=="__main__":
         fname="v"+str(k)+".out";
         print(fname)
         vf=Vfld(fname);
+        vf.v-=10*vmsk.mk
         if isum==0:
-            img=vf.draw1(ax,cmap="jet",Fac=Fac,vmax=1);
+            img=vf.draw1(ax,cmap="jet",Fac=Fac,vmax=1.0);
             #plt.colorbar(cax1,orientation='horizontal')
             fig.colorbar(img,cax=cax,orientation="vertical",format=fmt)
         else:

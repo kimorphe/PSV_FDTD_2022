@@ -60,6 +60,7 @@ int main(int argv, char *argc[]){
 	//dom1.WireCut();
 	dom1.out_kcell(); // export kcell data
 	dom1.out_kcell_tight(); // export kcell data without PML
+	dom1.out_vmask();
 
 	ncrk=make_cracks(fgeom,dom1,&crk);
 	fCOD=(FILE **)malloc(sizeof(FILE*)*ncrk);

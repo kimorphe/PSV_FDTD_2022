@@ -59,7 +59,7 @@ class KCELL:
         #ax.imshow(self.Z,aspect=1.0,extent=ext,cmap="gray",origin="lower",vmin=-1.0,vmax=1)
         ax.imshow(self.Z,aspect=1.0,extent=ext,cmap=self.cmap,origin="lower")
         ax.set_ylim([Xa[1]-10,Xb[1]+10])
-        ax.set_xlim([Xa[0]+10,Xb[0]-10])
+        #ax.set_xlim([Xa[0]+10,Xb[0]-10])
         ax.grid(True)
         #ax.grid(True)
     def pix2patch(self):

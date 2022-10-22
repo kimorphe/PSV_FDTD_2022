@@ -43,6 +43,7 @@ class Dom2D{
 		void butt_weld(char *fn);
 		void out_kcell();
 		void out_kcell_tight();
+		void out_vmask();
 		Dom2D(char *fname);
 		void CFL(double dt);
 		void gridNum(int ityp);

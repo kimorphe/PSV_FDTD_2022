@@ -748,6 +748,35 @@ void Dom2D :: out_kcell_tight(){
 
 	fflush(fp);
 }
+void Dom2D :: out_vmask(){
+	FILE *fp=fopen("vmask.dat","w");
+
+	int i,j,ndat[2];
+	double x1[2],x2[2];
+	ndat[0]=iYb[0]-iYa[0]+1;
+	ndat[1]=iYb[1]-iYa[1]+1;
+	//indx2cod(iYa[0],iYa[1],2,Xa,dx,x1);
+	//indx2cod(iYb[0],iYb[1],2,Xa,dx,x2);
+	x1[0]=Xa[0]+dx[0]*(iYa[0]+0.5);
+	x1[1]=Xa[1]+dx[1]*(iYa[1]+0.5);
+	x2[0]=Xa[0]+dx[0]*(iYb[0]+0.5);
+	x2[1]=Xa[1]+dx[1]*(iYb[1]+0.5);
+
+	fprintf(fp,"# Xa[0], Xb[0]\n");
+		fprintf(fp,"%lf %lf\n",x1[0],x2[0]);
+	fprintf(fp,"# Xa[1], Xb[1]\n");
+		fprintf(fp,"%lf %lf\n",x1[1],x2[1]);
+	fprintf(fp,"# Nx[0], Nx[1]\n");
+		fprintf(fp,"%d %d\n",ndat[0],ndat[1]);
+	fprintf(fp,"# kcell[i][j]\n");
+	for(i=iYa[0]; i<=iYb[0]  ; i++){
+	for(j=iYa[1]; j<=iYb[1]  ; j++){
+		fprintf(fp,"%ld\n",kcell[i][j]);
+	}
+	}
+	fclose(fp);
+
+};
 void Dom2D :: out_kcell(){
 
 	FILE *fp=fopen("kcell.dat","w");

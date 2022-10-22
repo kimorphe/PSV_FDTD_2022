@@ -70,16 +70,27 @@ void Recs :: setup(
 	Ng=0;
 	Len=dist2d(X1,X2);
 	if( ntmp > 1) dX=Len/(ntmp-1); 
+
 	dom.gridNum(ityp);	// get number of grid  
 	cod2indx(X1,ityp,dom.Xa,dom.dx,indx);
 	switch(idir){
 		case 0:	//horizontally aligned points
+			if( dX<abs(dom.dx[0])){
+				dX=dom.dx[0];
+				ntmp=int(Len/dX)+1;
+			};
+
 			if(indx[1] < 0) break;
 			if(indx[1] >= dom.Nx[1]) break;
 			xcod[1]=X1[1];
 			npnt=ntmp;
 			break;
 		case 1:	// vertically aligned points
+			if(dX<abs(dom.dx[1])){
+				dX=dom.dx[1];
+				ntmp=int(Len/dX)+1;
+			}
+
 			if(indx[0] < 0) break;
 			if(indx[0] >= dom.Nx[0]) break;
 			xcod[0]=X1[0];
