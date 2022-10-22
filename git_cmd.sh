@@ -20,6 +20,7 @@ git add Demo*/*.ods
 #git add Demo*/*.txt
 #git add Demo1/*.sh
 
+git add *.py
 git add Qt/*.py
 git add HTML/*
 

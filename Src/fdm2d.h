@@ -1,4 +1,5 @@
 void mem_alloc2D(int nx, int ny, double ***pt);
+void show_msg(char *fn);
 
 //	********************************************
 //
@@ -39,6 +40,7 @@ class Dom2D{
 		void WireCut(double xs[2], double xe[2], double rd);
 		void angled_slit(char *fn);
 		void polygon(char *fn);
+		void butt_weld(char *fn);
 		void out_kcell();
 		void out_kcell_tight();
 		Dom2D(char *fname);

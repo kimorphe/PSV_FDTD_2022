@@ -56,6 +56,7 @@ int main(int argv, char *argc[]){
 	dom1.perfo_para(fgeom);
 	dom1.polygon(fgeom);
 	dom1.Cut(fgeom);
+	dom1.butt_weld(fgeom);
 	//dom1.WireCut();
 	dom1.out_kcell(); // export kcell data
 	dom1.out_kcell_tight(); // export kcell data without PML

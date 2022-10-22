@@ -18,6 +18,7 @@ class Bump{
 		void shift(double xc, double h);
 	private:
 };
+
 Bump::Bump(double aw, double ht){
 	a=aw;
 	dh=abs(ht);
@@ -38,11 +39,14 @@ double  Bump::height(double x){
 	double y=h;
 	x-=xc;
 	if(abs(x)>a) return(y);
-
 	y=sgn*(sqrt(Rd*Rd-x*x)-b)+h;
 	return(y);
 };
 //----------------------------------------------------------
+// BEAD
+// a_top, dh_top, h_top
+// a_btm, dh_btm, h_btm
+// 
 int main(){
 	double x,dx,x1,x2;
 	int i,Nx=201;

@@ -53,14 +53,14 @@ void PML :: setup(Dom2D dom, char *ficon){
 
 		ss=dom.xa[0]-xx;
 		if(ss > 0.0){
-			W2=2.0*fabs(dom.Wa[0]);
-			A0=-(mexp+1)*dom.cL*logf(gmm)/pow(W2,mexp+1);	
+			W2=fabs(dom.Wa[0]);
+			A0=-(mexp+1)*dom.cL*logf(gmm)/pow(W2,mexp+1)*0.5;	
 			dmpx[i]=A0*pow(ss,mexp);
 		}
 		ss=xx-dom.xb[0];
 		if(ss > 0.0){
-			W2=2.0*fabs(dom.Wb[0]);
-			A0=-(mexp+1)*dom.cL*logf(gmm)/pow(W2,mexp+1);	
+			W2=fabs(dom.Wb[0]);
+			A0=-(mexp+1)*dom.cL*logf(gmm)/pow(W2,mexp+1)*0.5;	
 			dmpx[i]=A0*pow(ss,mexp);
 		}
 	}
@@ -72,14 +72,14 @@ void PML :: setup(Dom2D dom, char *ficon){
 
 		ss=dom.xa[1]-yy;
 		if(ss > 0.0){
-			W2=2.0*fabs(dom.Wa[1]);
-			A0=-(mexp+1)*dom.cL*logf(gmm)/pow(W2,mexp+1);	
+			W2=fabs(dom.Wa[1]);
+			A0=-(mexp+1)*dom.cL*logf(gmm)/pow(W2,mexp+1)*0.5;	
 			dmpy[j]=A0*pow(ss,mexp);
 		}
 		ss=yy-dom.xb[1];
 		if(ss > 0.0){
-			W2=2.0*fabs(dom.Wb[1]);
-			A0=-(mexp+1)*dom.cL*logf(gmm)/pow(W2,mexp+1);	
+			W2=fabs(dom.Wb[1]);
+			A0=-(mexp+1)*dom.cL*logf(gmm)/pow(W2,mexp+1)*0.5;
 			dmpy[j]=A0*pow(ss,mexp);
 		}
 	}		

@@ -625,6 +625,92 @@ void Dom2D::slit(char *fname){
 	};
 	fclose(fp);
 }
+
+void show_msg(char *fn){
+	printf("Cannot find file %s \n",fn);
+	printf(" --> abort process ...\n");
+	exit(-1);
+
+};
+//-------------   Bump Class   ---------------------
+class Bump{
+	public:
+		double a;	// half width
+		double dh;	// height
+		double h;	// elevation
+		double Rd;	// radius
+		double b;
+		double sgn;
+		void shape(double a, double dh);
+		double height(double x);
+		double xc;
+		void shift(double xc, double h);
+	private:
+};
+void Bump::shape(double aw, double ht){
+	a=aw;
+	dh=abs(ht);
+	sgn=1.0;
+	if( ht < 0.0) sgn=-1.0;
+		
+	Rd=(a*a+dh*dh)/dh*0.5;
+	b=sqrt(Rd*Rd-a*a);
+
+	xc=0.0;
+	h=0.0;
+};
+void Bump::shift(double x_shift, double y_shift){
+	xc=x_shift;
+	h=y_shift;
+};
+double  Bump::height(double x){
+	double y=h;
+	x-=xc;
+	if(abs(x)>a) return(y);
+	y=sgn*(sqrt(Rd*Rd-x*x)-b)+h;
+	return(y);
+};
+//----------------------------------------------------
+void Dom2D::butt_weld(char *fname){
+	FILE *fp;
+	char cbff[7];
+	fp=fopen(fname,"r");
+	if(fp==NULL) show_msg(fname);
+
+	int i,j,jbnd;
+	double w2,dh;
+	double xc,ht;
+	Bump bmp_top, bmp_btm;
+	double xf[2],xcod,ycod;
+
+	while(fgets(cbff,7,fp) !=NULL){
+		if(strcmp(cbff,"##Bead")==0){
+			printf("Flag ##Bead found !!\n");
+			fscanf(fp,"%lf %lf %lf %lf\n",&w2,&dh,&xc,&ht);
+			bmp_top.shape(w2,dh); 
+			bmp_top.shift(xc,ht);
+
+			fscanf(fp,"%lf %lf %lf %lf\n",&w2,&dh,&xc,&ht);
+			bmp_btm.shape(w2,-dh); 
+			bmp_btm.shift(xc, ht);
+
+			for(i=0;i<Ndiv[0];i++){
+				xcod=Xa[0]+dx[0]*(i+0.5);
+				ycod=bmp_top.height(xcod);
+				jbnd=int((ycod-Xa[1])/dx[1]+0.5);	// snap to v2 grid
+				if(jbnd<0) jbnd=0;
+				for(j=jbnd;j<Ndiv[1];j++) kcell[i][j]=1;
+
+				ycod=bmp_btm.height(xcod);
+				jbnd=int((ycod-Xa[1])/dx[1]+0.5);	// snap to v2 grid
+				if(jbnd>Ndiv[1]) jbnd=Ndiv[1];
+				for(j=0;j<jbnd;j++) kcell[i][j]=1;
+			}
+		}
+	};
+	fclose(fp);
+};
+
 //-------------EXPORT GEOMETRY DATA  ------------------
 void Dom2D :: out_kcell_tight(){
 	FILE *fp=fopen("kcell_tight.dat","w");
