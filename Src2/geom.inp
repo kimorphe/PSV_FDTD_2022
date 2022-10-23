@@ -1,0 +1,54 @@
+# kcell data file if exist(If not, DO LEAVE the blank line)
+
+# Xa[2], Xb[2]
+  -35.0 -2.0
+   35.0 15.0
+# Ndiv[2]
+ 1400 340
+# Wa[2] (PML, lower left corner)
+ 10.0 0.0
+# Wb[2] (PML, upper right corner)
+ 10.0 0.0
+# rho, cL, cT (density & wave velocities)
+ 2.7 6.00 3.00
+# Ya, Yb (imaging area)
+ -35.001 -0.999
+  35.99  14.996
+#ts, te, Nt (output times)
+ 0.0 20.0 101
+#irst (restart: yes=1, No=0)
+ 0
+# tr1, tr2 (time range )
+ 18.0, 22.5
+
+ 45-22.5=22.5
+ 45-27=18.0
+
+##Bead
+ 5.0 2.5 0.0 12.0
+ 2.0 1.0 0.0  0.0
+##End
+
+**Bead sectionのformat
+  half width, height, x_center, y_level (top)
+  half width, height, x_center, y_level (bottm)
+**
+
+//##Wire
+ -14.0 12.0
+ 4.0 0.2 -75.0
+#END
+
+ Wire欄のformat
+  開始点の座標
+　長さ、幅、角度[deg]
+
+##RECS
+# nrec
+ 1
+# idir(0:horiz, 1:vert), ityp(grid type), X1, X2, npnt 
+ 0 1
+-25.0 11.999
+-15.0 11.999 
+ 41 
+##END

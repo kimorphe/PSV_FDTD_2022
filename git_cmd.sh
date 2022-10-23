@@ -9,6 +9,10 @@ git add Src/makefile
 git add Src/*.py
 git add Src/*.sh
 
+git add Src2/*.h
+git add Src2/*.cpp
+git add Src2/makefile
+
 git add *.inp
 git add inwv0.dat
 
