@@ -1,0 +1,10 @@
+# number of source elements: nele_t
+ 2
+# number of transmission pattern
+ 2
+# actv, delay (active source element & delay )
+ 1  0.0
+ 0  1.0
+# actv, delay 
+ 0  2.0
+ 1  3.0
