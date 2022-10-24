@@ -14,12 +14,12 @@
 # Ya, Yb (imaging area)
  -35.001 -0.999
   35.99  14.996
-#ts, te, Nt (output times)
- 0.0 20.0 101
+##ts, te, Nt (output times)
+# 0.0 20.0 101
 #irst (restart: yes=1, No=0)
- 0
-# tr1, tr2 (time range )
- 18.0, 22.5
+# 0
+## tr1, tr2 (time range )
+# 18.0, 22.5
 
  45-22.5=22.5
  45-27=18.0

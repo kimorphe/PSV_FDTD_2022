@@ -13,10 +13,10 @@ int main(int argc, char *argv[]){
 
 	printf("********* log files *********\n");
 	ctr.setup_domain(fgeom);
-//	ctr.time_setting(ftset);
-//	ctr.src_setting(fsrce);
-//	ctr.wvfm_setting();
-//	ctr.array_setting(farry);
+	ctr.time_setting(ftset);
+	ctr.src_setting(fsrce);
+	ctr.wvfm_setting();
+	ctr.array_setting(farry);
 	printf("*****************************\n");
 	
 	int it,isum,m;

@@ -1,0 +1,17 @@
+# nsrc(number of source element)
+ 2
+# type, xy, wd, nml, wvID, th_in (type=1:v1, 2:v2, posi., width, normal, wvfm No, th_in[deg])
+ 2,  20.0, 10.0,  1,  0, -60.0
+ 2, -20.0, 10.0,  1,  0,  60.0
+
+
+
+//# N_meas (Array)
+// 2
+# active, A0, delay
+// 1,  1.0, 0.0
+ 0,  1.0, 0.1
+# active, A0, delay
+ 0,  1.0, 0.0
+ 1,  1.0, 0.0
+

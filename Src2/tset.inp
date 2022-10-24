@@ -1,0 +1,8 @@
+# Trng, Nt
+ 20.0, 3401
+# tout_s, tout_e, nout (output control: time window & steps)
+  0.0, 20.0, 101
+#irst (restart: yes=1, No=0)
+ 0
+# tr1, tr2 (time range )
+ 18.0, 22.5

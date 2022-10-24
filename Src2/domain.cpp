@@ -58,8 +58,10 @@ void DOMAIN::fwrite(){
 	fprintf(fp," NHb=(%d, %d)\n",NHa[0],NHa[1]);
 	fprintf(fp,"---Material Consntants---\n");
 	fprintf(fp,"  cT=%lf [km/s]\n",cT);
+	fprintf(fp,"  cL=%lf [km/s]\n",cL);
 	fprintf(fp," rho=%lf [g/cm3]\n",rho);
 	fprintf(fp," amu=%lf [GPa]\n",amu);
+	fprintf(fp,"almb=%lf [GPa]\n",almb);
 	fclose(fp);
 	printf(" --> domain.out\n");
 };

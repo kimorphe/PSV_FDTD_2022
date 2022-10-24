@@ -1,0 +1,14 @@
+# nele(number of array element)
+ 2
+# N_meas (Array)
+ 1
+# active, A0, delay
+ 1,  1.0, 0.0
+ 0,  1.0, 0.0
+
+
+ 0,  1.0, 0.0
+# active, A0, delay
+ 0,  1.0, 0.0
+ 1,  1.0, 0.0
+

@@ -71,18 +71,6 @@ void CNTRL::setup_domain(char *fname){
 	fscanf(fp,"%lf %lf\n",Ya,Ya+1);
 	fscanf(fp,"%lf %lf\n",Yb,Yb+1);
 
-	fgets(cbff,128,fp);
-	fscanf(fp,"%lf %lf %d\n",&tout_s,&tout_e,&Nout);
-
-	fgets(cbff,128,fp);
-	fscanf(fp,"%d\n",&irst);
-	printf("irst(restart)=%d\n",irst);
-	if(irst==1){
-		fgets(cbff,128,fp);
-		fscanf(fp,"%lf, %lf\n",&tr1,&tr2);
-		printf("(tr1,tr2)=(%lf, %lf)\n",tr1,tr2);
-	}
-
 	fclose(fp);
 
 //		Setup Domain Object
@@ -143,14 +131,11 @@ void CNTRL::setup_domain(char *fname){
 	char fnf[128]="field_setting.out";
 	char md[6]="w",name[6];
 	sprintf(name,"s11"); s11.fwrite_prms(fnf,md,name);
+	sprintf(md,"a");
 	sprintf(name,"v1"); v1.fwrite_prms(fnf,md,name);
 	sprintf(name,"v2"); v2.fwrite_prms(fnf,md,name);
-	//sprintf(md,"a");
-	//sprintf(name,"v3x"); v3x.fwrite_prms(fnf,md,name);
-	//sprintf(name,"v3y"); v3y.fwrite_prms(fnf,md,name);
-	//sprintf(name,"q1"); q1.fwrite_prms(fnf,md,name);
-	//sprintf(name,"q2"); q2.fwrite_prms(fnf,md,name);
-	printf(" -->field_setting.dat\n");
+	sprintf(name,"s12"); s12.fwrite_prms(fnf,md,name);
+	printf(" -->field_setting.out\n");
 	sprintf(fnf,"v1bnd.dat"); 
 	v1.fwrite_bnd(fnf);
 	sprintf(fnf,"v2bnd.dat"); 
@@ -158,11 +143,11 @@ void CNTRL::setup_domain(char *fname){
 	sprintf(fnf,"s12bnd.dat"); 
 	s12.fwrite_bnd(fnf);
 
-
 	printf(" | -->v1bnd.dat\n");
 	printf(" | -->v2bnd.dat\n");
 	printf(" | -->s12bnd.dat\n");
-/*
+
+/*		following needed updating if kcell read from a file 
 	ptmp=(long int *)malloc(sizeof(long int)*Ndiv[0]*Ndiv[1]);
 	kcell=(long int **)malloc(sizeof(long int*)*Ndiv[0]);
 	for(i=0; i<Ndiv[0];i++){
@@ -184,121 +169,6 @@ void CNTRL::setup_domain(char *fname){
 	}
 */
 };
-/*
-void CNTRL::setup_domain2(char *fname){
-	FILE *fp=fopen(fname,"r");
-	char cbff[128];	
-
-	if(fp==NULL) show_msg(fname);
-
-	// Load domain setting
-	fgets(cbff,128,fp); 
-	fscanf(fp,"%lf, %lf\n",Xa,Xa+1);	// lower-left corner
-	fgets(cbff,128,fp);
-	fscanf(fp,"%lf, %lf\n",Wd,Wd+1);	// width & height
-
-	fgets(cbff,128,fp);
-	fscanf(fp,"%d, %d\n",Ndiv,Ndiv+1);	// number of cells along x & y axes
-
-	fgets(cbff,128,fp);
-	fscanf(fp,"%lf, %lf\n",&ct, &rho);
-	amu=rho*ct*ct;
-
-	fgets(cbff,128,fp);
-	fscanf(fp,"%lf, %lf\n",Ha,Ha+1);	// PML thickness 
-	fscanf(fp,"%lf, %lf\n",Hb,Hb+1); 	// PML thickness
-
-	fclose(fp);
-
-	dx[0]=Wd[0]/Ndiv[0];
-	dx[1]=Wd[1]/Ndiv[1];
-
-	// domain extention 
-	for(int i=0; i<2; i++){
-		NHa[i]=ceil(Ha[i]/dx[i]);
-		NHb[i]=ceil(Hb[i]/dx[i]);
-		Ha[i]=dx[i]*NHa[i];
-		Hb[i]=dx[i]*NHb[i];
-
-		Xa[i]-=Ha[i];
-		Wd[i]=Wd[i]+Ha[i]+Hb[i];
-		Ndiv[i]=Ndiv[i]+NHa[i]+NHb[i];
-	}
-
-	dm.setup(Xa,Wd,dx);
-	dm.ct=ct; dm.rho=rho; dm.amu=amu;
-	dm.init(Ndiv);
-	dm.NHa=NHa;
-	dm.NHb=NHb;
-
-	double gmm=1.e-05;	// expected decay 
-	dm.Ha=Ha;
-	dm.Hb=Hb;
-	dm.PML_setup(gmm);
-
-	int i;
-	FILE *ftmp=fopen("pml_val.out","w");
-	double tmp;
-	for(i=0; i<Ndiv[0]; i++){
-		tmp=Xa[0]+dx[0]*(i+0.5);
-		fprintf(ftmp,"%lf, %lf\n",tmp,dm.PML_dcy(0,tmp));
-	}
-	fprintf(ftmp,"\n");
-	for(i=0; i<Ndiv[1]; i++){
-		tmp=Xa[1]+dx[1]*(i+0.5);
-		fprintf(ftmp,"%lf, %lf\n",tmp,dm.PML_dcy(1,tmp));
-	}
-	fclose(ftmp);
-	printf(" -->pml_val.out\n");
-
-	dm.perfo_ellip(fname);
-	dm.slit(fname);
-	dm.topography(fname);
-	dm.out_kcell();		// write kcell data 
-	printf(" -->kcell.dat\n");
-	dm.fwrite();	// write domain setting
-	
-	// Setup staggered grid system 
-	v3.init(Ndiv,0);	
-	v3x.init(Ndiv,0);	
-	v3y.init(Ndiv,0);	
-	q1.init(Ndiv,1);	
-	q2.init(Ndiv,2);	
-
-	v3.setup(Xa,Wd,dx);
-	v3x.setup(Xa,Wd,dx);
-	v3y.setup(Xa,Wd,dx);
-	q1.setup(Xa,Wd,dx);
-	q2.setup(Xa,Wd,dx);
-
-	//dm.print_prms();
-	//v3.print_prms();
-	//q1.print_prms();
-	//q2.print_prms();
-	
-	v3.gen_indx0(dm.kcell);
-	v3x.gen_indx0(dm.kcell);
-	v3y.gen_indx0(dm.kcell);
-	q1.gen_indx1(dm.kcell);
-	q2.gen_indx2(dm.kcell);
-
-	char fnf[128]="field_setting.out";
-	char md[6]="w",name[6];
-	sprintf(name,"v3"); v3.fwrite_prms(fnf,md,name);
-	sprintf(md,"a");
-	sprintf(name,"v3x"); v3x.fwrite_prms(fnf,md,name);
-	sprintf(name,"v3y"); v3y.fwrite_prms(fnf,md,name);
-	sprintf(name,"q1"); q1.fwrite_prms(fnf,md,name);
-	sprintf(name,"q2"); q2.fwrite_prms(fnf,md,name);
-	printf(" -->field_setting.dat\n");
-	sprintf(fnf,"q1bnd.dat"); 
-	q1.fwrite_bnd(fnf);
-	sprintf(fnf,"q2bnd.dat"); 
-	q2.fwrite_bnd(fnf);
-	printf(" | -->q1bnd.dat\n");
-	printf(" | -->q2bnd.dat\n");
-};
-*/
 bool CNTRL::out_time(int it){
 	if(it==iout){
 		printf("it/Nt=%d/%d (Nout=%d)\n",it,Nt,iout);
@@ -308,51 +178,40 @@ bool CNTRL::out_time(int it){
 	return(false);
 };
 
-
-
-
-/*
 void CNTRL::time_setting(char *fname){
 	FILE *fp=fopen(fname,"r");
 	char cbff[128];	
 	if(fp==NULL) show_msg(fname);
 
 	fgets(cbff,128,fp);
-	//fscanf(fp,"%lf, %d\n",&Tf, &Nt);
-	//dt=Tf/(Nt-1);
-	fscanf(fp,"%lf, %lf\n",&Tf, &dt);
-	Nt=int(Tf/dt)+1;
-	Tf=(Nt-1)*dt;
-	//printf("Nt=%d, Tf=%lf\n",Nt,Tf);
-	//exit(-1);
+	fscanf(fp,"%lf, %d\n",&Tf, &Nt);
+	dt=Tf/(Nt-1);
+	fgets(cbff,128,fp);
+	fscanf(fp,"%lf,%lf,%d\n",&tout_s,&tout_e,&Nout);
+	fgets(cbff,128,fp);
+	fscanf(fp,"%d\n",&irst);
+	if(irst==1){
+		fgets(cbff,128,fp);
+		fscanf(fp,"%lf, %lf\n",&tr1,&tr2);
+		printf("(tr1,tr2)=(%lf, %lf)\n",tr1,tr2);
+	}
 
 	printf(" CFL=%lf\n",CNTRL::CFL());
 
-	fgets(cbff,128,fp);
-	fscanf(fp,"%lf, %lf, %d\n",&tout_s, &tout_e, &Nout);
 	Ninc=(tout_e-tout_s)/((Nout-1)*dt);
 	if(Ninc<1) Ninc=1;
 	iout=floor(tout_s/dt);
 	if(iout==0) iout+=Ninc;
 	iout0=iout;
 
-	fgets(cbff,128,fp);
-	fgets(cbff,128,fp);
-	int ftyp;
-	fscanf(fp,"%d\n",&ftyp);
-	if(ftyp==1){
-		double xs,ys,sig,f0;
-		fgets(cbff,128,fp);
-		fscanf(fp,"%lf, %lf, %lf, %lf\n",&xs,&ys,&sig,&f0);
-		printf("xs=(%lf, %lf), sig=%lf, p0=%lf\n",xs,ys,sig,f0);
-		if(ftyp==0) v3.set_IC(xs,ys,sig,f0);
-		if(ftyp==1) q1.set_IC(xs,ys,sig,f0);
-		if(ftyp==2) q2.set_IC(xs,ys,sig,f0);
-	}
+	/*
+		If Necessary READ I.C. Here
+	*/
 
 	fclose(fp);
 
 	fp=fopen("time_setting.out","w");
+	fprintf(fp,"irst(restart 0:No, 1:Yes)=%d\n",irst);
 	fprintf(fp,"tlim=[ %lf, %lf]\n",0.0,Tf);
 	fprintf(fp,"  Nt=%d\n",Nt);
 	fprintf(fp,"  dt=%lf\n",dt);
@@ -360,12 +219,21 @@ void CNTRL::time_setting(char *fname){
 	fprintf(fp,"Nout=%d\n",Nout);
 	fprintf(fp,"Ninc=%d,(tinc=%lf)\n",Ninc,Ninc*dt);
 	fprintf(fp,"iout_start=%d,(tout_start=%lf)\n",iout0, iout0*dt);
-	fprintf(fp,"ftyp=%d (I.C. type, currently only -1 is allowed)\n",ftyp);
 	fclose(fp);
 	printf(" -->time_setting.out\n");
 	
 };
-
+double CNTRL::CFL(){
+	double dh=dx[0];
+	double Crt;
+	if(dh >dx[1]) dh=dx[1];
+	Crt=cL*dt/dh*sqrt(2.0);
+	if(Crt>1.0){
+		printf(" stability condition is not satisfied (CFL=%lf)!!\n --> abort proces\n",Crt);
+		exit(-1);
+	};
+	return(Crt);
+};
 
 void CNTRL::wvfm_setting(){
 	char fname[128];
@@ -397,6 +265,7 @@ void CNTRL::wvfm_setting(){
 	//sprintf(fnout,"awvw.out");
 	//wv.out_Amp(fnout,0);
 };
+
 int CNTRL::src_setting(char *fname){
 	FILE *fp=fopen(fname,"r");
 	char cbff[128];	
@@ -516,25 +385,10 @@ void CNTRL::array_setting(char *fname){
 	//ary.print();
 	fclose(fp);
 };
+/*
 void CNTRL::capture(int jt){
 	int i,j,type;
 	for(j=0;j<nsrc;j++) srcs[j].record(jt,v3.F);
-};
-double CNTRL::CFL(){
-	double dh=dx[0];
-	double Crt;
-	if(dh >dx[1]) dh=dx[1];
-	Crt=cT*dt/dh*sqrt(2.0);
-	//printf("dt=%lf, dx=%lf, %lf, ct=%lf\n",dt,dx[0],dx[1],ct);
-	//printf("Crt=%lf\n",Crt);
-	//exit(-1);
-	//dh=sqrt(dx[0]*dx[0]+dx[1]*dx[1]);
-	//Crt=ct*dt/dh;
-	if(Crt>1.0){
-		printf(" stability condition is not satisfied (CFL=%lf)!!\n --> abort proces\n",Crt);
-		exit(-1);
-	};
-	return(Crt);
 };
 void CNTRL::q2v(int itime){
 	int i,j,k,l;
