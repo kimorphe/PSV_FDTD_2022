@@ -31,6 +31,7 @@ class FIELD{
 		void gen_indx2(int **kcell);	// v2
 		void gen_indx3(int **kcell);	// s12
 		int *kbnd, *kint;
+		bool *ksrc;
 		int Nin,Nbnd,Nex;
 		void clear();
 		void fwrite_prms(char *fn, char *mode, char *name);
@@ -158,6 +159,7 @@ class CNTRL{
 		void clear();
 		void fwrite_ary();
 		void snapshot(int meas, int isum,int it);
+		int find_src_index();
 	private:
 };
 double pwfun(

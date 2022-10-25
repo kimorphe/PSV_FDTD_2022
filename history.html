@@ -27,4 +27,16 @@
 	<li> v0.outだけ背景の塗り分けがうまく行かない(原因不明...)</li>
 	<li> bscan.pyを更新: B-scan表示とdelay and sumによるA-scan波形合成</li>
 </ul>
+<h4>10/23-24(-Mon.)</h4>
+<ul>
+	<li>Majer verion upの開始--> SH-wave のクラスを利用してPSV-waveのFDTD作成に着手</li>
+	<li>入力部までを作成(geom.inp, tset.inp, src.inp, inwv0.dat, array.inpの読み込みとlog出力)</li>
+</ul>
+<h4>10/25(Tue.)</h4>
+<ul>
+	<li> boundary indexとsource indexの重複解除処理の用意 (source設定をプログラム内でdynamicに更新するため)</li>
+	<li> 目標:FIELDクラスインスタンスv1, v2のkbnd[-] index set のうちsourceとなるものをmarking</li>
+	<li> CNTRL::find_src_indexで探索のためのmethodを作成中</li>
+	<li> FIELD::ksrc[Nbnd](bool型)にsource gridの場合はtrueを設定</li>
+</ul>
 </html>

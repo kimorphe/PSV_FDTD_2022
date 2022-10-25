@@ -18,6 +18,8 @@ int main(int argc, char *argv[]){
 	ctr.wvfm_setting();
 	ctr.array_setting(farry);
 	printf("*****************************\n");
+
+	ctr.find_src_index();
 	
 	int it,isum,m;
 /*	

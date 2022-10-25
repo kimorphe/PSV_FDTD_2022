@@ -250,8 +250,10 @@ void FIELD::gen_indx1(int **kcell){
 		if(m==0){
 			kint=(int *)malloc(sizeof(int)*Nin);
 			kbnd=(int *)malloc(sizeof(int)*Nbnd);
+			ksrc=(bool *)malloc(sizeof(bool)*Nbnd);
 		}
 	}
+	for(i=0;i<Nbnd;i++) ksrc[i]=false;
 };
 //		GENERATE 1D INDEX FOR v2 
 void FIELD::gen_indx2(int **kcell){
@@ -288,26 +290,23 @@ void FIELD::gen_indx2(int **kcell){
 		if(m==0){
 			kint=(int *)malloc(sizeof(int)*Nin);
 			kbnd=(int *)malloc(sizeof(int)*Nbnd);
+			ksrc=(bool *)malloc(sizeof(bool)*Nbnd);
 		}
 	}
+
+	for(i=0;i<Nbnd;i++) ksrc[i]=false;
 };
 
 //		GENERATE 1D INDEX FOR s12 
-//void Fld2D::gen_indx12(Dom2D dom){
 void FIELD::gen_indx3(int **kcell){
 	int i,j,k,m,alph;
 	int k0,k1,k2,k3;
-	//int Nin,Nbnd,Nex;
 	bool filled[4]; 
-
-	//Fld2D :: gridNum(3);
 
 	for(m =0;m<2;m++){
 		Nin=0;
 		Nbnd=0;
 		Nex=0;
-	//for(i=0;i<Nx[0];i++){
-	//for(j=0;j<Nx[1];j++){
 	for(i=0;i<Ng[0];i++){
 	for(j=0;j<Ng[1];j++){
 		k0=1; k1=1; k2=1; k3=1;
@@ -315,22 +314,16 @@ void FIELD::gen_indx3(int **kcell){
 		if(i==0){ 
 			filled[1]=0; filled[2]=0;
 		}
-		//if(i==Nx[0]-1){ 
 		if(i==Ng[0]-1){ 
 			filled[0]=0; filled[3]=0;
 		}
 		if(j==0){ 
 			filled[2]=0; filled[3]=0;
 		}
-		//if(j==Nx[1]-1){ 
 		if(j==Ng[1]-1){ 
 			filled[0]=0; filled[1]=0;
 		}
 
-		//if(filled[0]==1) k0=dom.kcell[i][j];
-		//if(filled[1]==1) k1=dom.kcell[i-1][j];
-		//if(filled[2]==1) k2=dom.kcell[i-1][j-1];
-		//if(filled[3]==1) k3=dom.kcell[i][j-1];
 		if(filled[0]==1) k0=kcell[i][j];
 		if(filled[1]==1) k1=kcell[i-1][j];
 		if(filled[2]==1) k2=kcell[i-1][j-1];
@@ -340,25 +333,21 @@ void FIELD::gen_indx3(int **kcell){
 
 		switch(k){
 		case 0: // interior grid
-			//if(m==1) kint12[Nin]=i*Nx[1]+j;
 			if(m==1) kint[Nin]=i*Ng[1]+j;
 			Nin++;
 			break;
 		case 1: // boundary grid
 		case 3:
-			//if(m==1) kbnd12[Nbnd]=i*Nx[1]+j;
 			if(m==1) kbnd[Nbnd]=i*Ng[1]+j;
 			Nbnd++; 
 			break;
 		case 2: 
 			alph= k0*k1 + k1*k2 + k2*k3 + k3*k0;	
 			if(alph==1){	// boundary grid
-				 //if(m==1) kbnd12[Nbnd]=i*Nx[1]+j;
 				 if(m==1) kbnd[Nbnd]=i*Ng[1]+j;
 				Nbnd++; 
 			}
 			if(alph==0){	// interior grid
-				//if(m==1) kint12[Nin]=i*Nx[1]+j;
 				if(m==1) kint[Nin]=i*Ng[1]+j;
 				Nin++;
 			}			
@@ -372,10 +361,6 @@ void FIELD::gen_indx3(int **kcell){
 		if(m==0){
 			kint=(int *)malloc(sizeof(int)*Nin);
 			kbnd=(int *)malloc(sizeof(int)*Nbnd);
-			//kint12=(int *)malloc(sizeof(int)*Nin);
-			//kbnd12=(int *)malloc(sizeof(int)*Nbnd);
-			//Nint12=Nin;
-			//Nbnd12=Nbnd;
 		}
 	}
 };
