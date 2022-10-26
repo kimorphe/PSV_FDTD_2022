@@ -34,9 +34,16 @@
 </ul>
 <h4>10/25(Tue.)</h4>
 <ul>
-	<li> boundary indexとsource indexの重複解除処理の用意 (source設定をプログラム内でdynamicに更新するため)</li>
+	<li> boundary indexとsource indexの重複解除処理の用意 (source設定をプログラム内で動的に更新するため)</li>
 	<li> 目標:FIELDクラスインスタンスv1, v2のkbnd[-] index set のうちsourceとなるものをmarking</li>
 	<li> CNTRL::find_src_indexで探索のためのmethodを作成中</li>
 	<li> FIELD::ksrc[Nbnd](bool型)にsource gridの場合はtrueを設定</li>
+</ul>
+<h4>10/26(Wed.)</h4>
+<ul>
+	<li>CNTRL::mark_src_grid()を作成</li>
+	<li>FIELD::v1.kbnd[Nbnd], v2.kbnd[Nbnd]にbool値を書き込み可能まで完成</li>
+	<li>SOURCEクラスのグリッド数ngを実際の数値になるよう修正(ksrc配列サイズと一致しない場合があるため)</li>
+	<li>next: 差分方程式の計算(内点，境界点，ソース)</li>
 </ul>
 </html>

@@ -350,6 +350,7 @@ int CNTRL::src_setting(char *fname){
 			break;
 		};
 		ng=isum;
+		srcs[k].ng=isum;
 		//srcs[k].print();
 		srcs[k].fwrite_setting(fout,mode,k);
 		sprintf(mode,"a");
@@ -387,42 +388,62 @@ void CNTRL::array_setting(char *fname){
 	//ary.print();
 	fclose(fp);
 };
-int CNTRL::find_src_index(){
-	int k=srcs[0].ksrc[20];
-	printf("k=%d\n",srcs[0].ksrc[10]);
+void CNTRL::mark_src_grid(){
+	int i,j,loc;
+	int type;
+	FIELD V;
 
-	int im;
-	int il=0;
-	int ih=v2.Nbnd-1;
-	if(abs(v2.kbnd[il])==k) return(il);
-	if(abs(v2.kbnd[ih])==k) return(ih);
+	for(i=0; i<nsrc; i++){
+		type=srcs[i].type;
+		if(type==1){
+			V=v1;
+		}else if(type ==2){
+			V=v2;
+		}else{
+			printf("invalid source type provided to mark_src_grid\n");
+			exit(-1);
+		}
+		for(j=0;j<srcs[i].ng;j++){
+			loc=CNTRL::find_src_index(V,srcs[i].ksrc[j]);
+			V.ksrc[loc]=true;
+			//printf("j=%d, loc=%d\n",j,loc);
+		};
+	};
 
+	/*
+	int isum=0;
+	for(i=0; i<v2.Nbnd; i++){
+		if(v2.ksrc[i]){
+			printf("i=%d, %d\n",i,v2.ksrc[i]);
+			isum++;
+		}
+	};
+	printf("isum=%d\n",isum);
+	*/
+};
+int CNTRL::find_src_index(FIELD V, int k){
+	int il,im,ih;
+	
+	il=0;
+	ih=V.Nbnd-1;
+	if(abs(V.kbnd[il])==k) return(il);
+	if(abs(V.kbnd[ih])==k) return(ih);
 	im=int((il+ih)*0.5);
-	printf("kmin=%d, ", v2.kbnd[il]);
-	printf("kmax=%d \n", v2.kbnd[ih]);
-	printf("ih=%d \n", ih);
 
-	int itr=0;
-	while(abs(v2.kbnd[im]) !=k){
-		itr++;
-		if(abs(v2.kbnd[im])>k){
+	while(abs(V.kbnd[im]) !=k){
+		if(ih-il<=1){
+			printf("Can't find source grid index %d in kbnd[*]\n",k);
+			exit(-1);
+		}
+		if(abs(V.kbnd[im])>k){
 			ih=im;
 		}else{
 			il=im;
 		};
 		im=int((il+ih)*0.5);
 
-		if(itr==v2.Nbnd-1){
-			puts("Cannot find source grid index");
-			break;
-		};
 	}
-	printf("im=%d\n",im);
-
-	for(int i=0;i<v2.Nbnd;i++){
-		if(abs(v2.kbnd[i])==k) printf("isrc=%d\n",i);
-	};
-
+	//printf("loc=%d, k=%d,%d\n",im, V.kbnd[im],k);
 	return(im);
 };
 /*

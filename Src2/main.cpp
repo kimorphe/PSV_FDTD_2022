@@ -19,9 +19,10 @@ int main(int argc, char *argv[]){
 	ctr.array_setting(farry);
 	printf("*****************************\n");
 
-	ctr.find_src_index();
 	
 	int it,isum,m;
+
+	ctr.mark_src_grid();
 /*	
 	for(m=0;m<ctr.ary.nmeas;m++){
 		printf("m=%d\n",m);
