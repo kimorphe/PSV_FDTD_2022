@@ -153,6 +153,8 @@ class CNTRL{
 		void array_setting(char *fname);
 		void v2q(int it);
 		void q2v(int it);
+		void v2s(int it);
+		void s2v(int it);
 		double CFL();
 		void record(int ii);
 		void capture(int ii);
