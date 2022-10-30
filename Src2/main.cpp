@@ -12,23 +12,24 @@ int main(int argc, char *argv[]){
 	char farry[128]="array.inp";
 
 	printf("********* log files *********\n");
-	ctr.setup_domain(fgeom);
-	ctr.time_setting(ftset);
-	ctr.src_setting(fsrce);
-	ctr.wvfm_setting();
-	ctr.array_setting(farry);
+	ctr.setup_domain(fgeom);		// define domain geometry & material properties
+	ctr.time_setting(ftset);		// set time range and increment
+	ctr.src_setting(fsrce);			// setup transducer elements
+	ctr.wvfm_setting();			// define excitation signal(waveform)
+	ctr.array_setting(farry);		// define array control 
 	printf("*****************************\n");
 
 	
 	int it,isum,m;
 
-	ctr.mark_src_grid();
 	for(m=0;m<ctr.ary.nmeas;m++){
+		ctr.mark_src_grid();	// ???????????????? coordination with array
 		printf("m=%d\n",m);
 		isum=0;
 		//ctr.snapshot(m,isum++,0);
 	for(it=0; it<ctr.Nt; it++){
-		ctr.s2v(it); 
+		printf("it=%d\n",it);
+		ctr.s2v(it);		// ????????????????  source term management
 		ctr.v2s(it);
 		//ctr.capture(it);
 		//if(ctr.out_time(it)) ctr.snapshot(m,isum++,it);
@@ -36,7 +37,7 @@ int main(int argc, char *argv[]){
 		//for(int i=0; i<ctr.nrec; i++) ctr.recs[i].fwrite();
 		//ctr.fwrite_ary();
 		ctr.round++;
-		//ctr.clear();
+		//ctr.clear();			
 	}
 	return(0);
 };

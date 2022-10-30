@@ -30,7 +30,7 @@ class FIELD{
 		void gen_indx1(int **kcell);	// v1
 		void gen_indx2(int **kcell);	// v2
 		void gen_indx3(int **kcell);	// s12
-		int *kbnd, *kint;
+		int *kbnd, *kint,*nml;
 		bool *ksrc;	// same array size as kbnd
 		int Nin,Nbnd,Nex;
 		void clear();

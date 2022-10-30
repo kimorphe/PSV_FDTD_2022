@@ -236,7 +236,11 @@ void FIELD::gen_indx1(int **kcell){
 		case 1: // boundary grid
 			if(m==1){
 				kbnd[Nbnd]=i*Ng[1]+j;
-				if(il==1) kbnd[Nbnd]*=-1;
+				nml[Nbnd]=1;
+				if(il==1){
+				       	kbnd[Nbnd]*=-1;
+					nml[Nbnd]=-1;
+				}
 			}
 			Nbnd++; 
 			break;
@@ -250,6 +254,7 @@ void FIELD::gen_indx1(int **kcell){
 		if(m==0){
 			kint=(int *)malloc(sizeof(int)*Nin);
 			kbnd=(int *)malloc(sizeof(int)*Nbnd);
+			nml=(int *)malloc(sizeof(int)*Nbnd);
 			ksrc=(bool *)malloc(sizeof(bool)*Nbnd);
 		}
 	}
@@ -277,7 +282,11 @@ void FIELD::gen_indx2(int **kcell){
 		case 1: // boundary grid
 			if(m==1){
 				kbnd[Nbnd]=i*Ng[1]+j;
-				if(id==1) kbnd[Nbnd]*=-1; 
+				nml[Nbnd]=1;
+				if(id==1){
+					kbnd[Nbnd]*=-1; 
+					nml[Nbnd]=-1;
+				}
 			}
 			Nbnd++; 
 			break;
@@ -290,6 +299,7 @@ void FIELD::gen_indx2(int **kcell){
 		if(m==0){
 			kint=(int *)malloc(sizeof(int)*Nin);
 			kbnd=(int *)malloc(sizeof(int)*Nbnd);
+			nml=(int *)malloc(sizeof(int)*Nbnd);
 			ksrc=(bool *)malloc(sizeof(bool)*Nbnd);
 		}
 	}

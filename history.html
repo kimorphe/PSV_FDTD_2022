@@ -46,4 +46,20 @@
 	<li>SOURCEクラスのグリッド数ngを実際の数値になるよう修正(ksrc配列サイズと一致しない場合があるため)</li>
 	<li>next: 差分方程式の計算(内点，境界点，ソース)</li>
 </ul>
+<h4>10/28(Fri.)</h4>
+<ul>
+	<li>差分方程式計算methodの作成(CNTRL:s2v,v2s)</li>
+	<li>旧versionのPMLクラスを最小限の修正で作成(compileまで完成)</li>
+</ul>
+<h4>10/29(Sat.)</h4>
+<ul>
+	<li>差分方程式計算methodの作成(CNTRL:s2v,v2s)</li>
+	<li>kbndの正負で境界向きを区別することの不具合が判明(FIELD::nml[Nbnd]in{1,-1})を追加</li>
+	<li>時間stepping計算が進むことまで確認</li>
+</ul>
+<h4>10/30(Sun.)</h4>
+<ul>
+	<li>境界値設定箇所の作成(CNTRL:s2v内)</li>
+	<li>time stepping計算が進むことは確認->出力routineの追加と計算結果の確認へ(debugging)</li>
+</ul>
 </html>
