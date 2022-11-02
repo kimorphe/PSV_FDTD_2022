@@ -175,6 +175,8 @@ void FIELD::init(int *ndiv, int ityp){
 		k++;
 	}
 	}
+	Nbnd=0;
+	Nin=0;
 };
 void FIELD::setup(double *xa, double *wdt, double *dh){
 	Xa=xa;
@@ -378,7 +380,11 @@ void FIELD::gen_indx3(int **kcell){
 void FIELD::clear(){
 	int i,j;
 	for(i=0;i<Ng[0];i++){ 
-		for(j=0;j<Ng[1];j++) F[i][j]=0.0;
+		for(j=0;j<Ng[1];j++){
+			F[i][j]=0.0;
+			Fx[i][j]=0.0;
+			Fy[i][j]=0.0;
+		}
 	};
 };
 

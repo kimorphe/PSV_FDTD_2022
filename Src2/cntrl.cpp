@@ -393,6 +393,7 @@ void CNTRL::mark_src_grid(){
 	int type;
 	FIELD V;
 
+
 	for(i=0; i<nsrc; i++){
 		type=srcs[i].type;
 		if(type==1){
@@ -403,6 +404,8 @@ void CNTRL::mark_src_grid(){
 			printf("invalid source type provided to mark_src_grid\n");
 			exit(-1);
 		}
+		for(j=0;j<V.Nbnd;j++) V.ksrc[j]=false;
+
 		for(j=0;j<srcs[i].ng;j++){
 			loc=CNTRL::find_src_index(V,srcs[i].ksrc[j]);
 			V.ksrc[loc]=true;
@@ -711,6 +714,15 @@ void CNTRL :: s2v(int itime){
 
 	}
 };
+void CNTRL::clear(){
+	v1.clear();
+	v2.clear();
+	s12.clear();
+	s11.clear();
+	s22.clear();
+	for(int i=0;i<nsrc;i++) srcs[i].clear();
+	iout=iout0;
+};
 
 //----------------------------------------------------
 /*
@@ -826,15 +838,6 @@ void CNTRL::v2q(int itime){
 
 };
 
-void CNTRL::clear(){
-	v3.clear();
-	q1.clear();
-	q2.clear();
-	v3x.clear();
-	v3y.clear();
-	for(int i=0;i<nsrc;i++) srcs[i].clear();
-	iout=iout0;
-};
 void CNTRL::fwrite_ary(){
 	int j,k;
 	char fname[128];
@@ -855,7 +858,48 @@ void CNTRL::fwrite_ary(){
 	};
 	fclose(fp);
 };
-void CNTRL::snapshot(int n_meas, int isum, int it){
-	v3.fwrite_trim(n_meas,isum,NHa,NHb,it*dt);
-};
 */
+void CNTRL::snapshot(int n_meas, int isum, int it){
+	//v3.fwrite_trim(n_meas,isum,NHa,NHb,it*dt);
+	char fname[128];
+	//sprintf(fname,"T%d/v%d.out",d_num,isum);
+	sprintf(fname,"T%d/v%d.out",round,isum);
+	FILE *fp=fopen(fname,"w");
+	if(fp==NULL) show_msg(fname);
+
+	int i,j;
+	double xll[2], wdt[2];
+	int ngs[2];
+	for(i=0;i<2;i++){
+		xll[i]=Xa[i]+NHa[i]*dx[i];
+		wdt[i]=Wd[i]-(NHa[i]+NHb[i])*dx[i];
+		//ngs[i]=Ng[i]-NHa[i]-NHb[i];
+		ngs[i]=Ndiv[i]-NHa[i]-NHb[i];
+	}
+	fprintf(fp,"# time\n");
+	fprintf(fp,"%lf\n",it*dt);
+	fprintf(fp,"# Xa[0:1]\n");
+	fprintf(fp,"%lf, %lf\n",xll[0],xll[1]);
+
+	fprintf(fp,"# Xb[0:1]\n");
+	fprintf(fp,"%lf, %lf\n",xll[0]+wdt[0],xll[1]+wdt[1]);
+
+	fprintf(fp,"# Ng[0:1]\n");
+	fprintf(fp,"%d, %d\n",ngs[0],ngs[1]);
+	fprintf(fp,"# field value\n");
+	double vx,vy;
+	double sxy;
+	for(i=0; i<ngs[0]; i++){
+	for(j=0; j<ngs[1]; j++){
+		vx=0.5*(v1.F[i][j]+v1.F[i+1][j]);
+		vy=0.5*(v2.F[i][j]+v2.F[i][j+1]);
+		fprintf(fp,"%lf %lf\n",vx,vy);
+
+		// uncomment the following when stress fieds are needed 
+		//sxy=0.25*(s12.F[i][j]+s12.F[i+1][j]+s12.F[i][j+1]+s12.F[i+1][j+1]);
+		//fprintf(fp,"%lf %lf %lf\n",s11.F[i][j],s22.F[i][j],sxy);
+	}
+	}
+
+	fclose(fp);
+};

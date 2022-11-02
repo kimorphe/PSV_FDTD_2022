@@ -26,18 +26,19 @@ int main(int argc, char *argv[]){
 		ctr.mark_src_grid();	// ???????????????? coordination with array
 		printf("m=%d\n",m);
 		isum=0;
-		//ctr.snapshot(m,isum++,0);
-	for(it=0; it<ctr.Nt; it++){
+		ctr.snapshot(m,isum++,0);
+	//for(it=0; it<ctr.Nt; it++){
+	for(it=0; it<5; it++){
 		printf("it=%d\n",it);
 		ctr.s2v(it);		// ????????????????  source term management
 		ctr.v2s(it);
 		//ctr.capture(it);
-		//if(ctr.out_time(it)) ctr.snapshot(m,isum++,it);
+		if(ctr.out_time(it)) ctr.snapshot(m,isum++,it);
 	};
 		//for(int i=0; i<ctr.nrec; i++) ctr.recs[i].fwrite();
 		//ctr.fwrite_ary();
 		ctr.round++;
-		//ctr.clear();			
+		ctr.clear();			
 	}
 	return(0);
 };
