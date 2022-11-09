@@ -11,6 +11,7 @@ git add Src/*.sh
 
 git add Src2/*.h
 git add Src2/*.cpp
+git add Src2/*.py
 git add Src2/makefile
 
 git add *.inp
