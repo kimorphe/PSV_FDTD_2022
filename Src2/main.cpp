@@ -23,13 +23,11 @@ int main(int argc, char *argv[]){
 	int it,isum,m;
 
 	for(m=0;m<ctr.ary.nmeas;m++){
-		ctr.mark_src_grid();	// ???????????????? coordination with array
+		ctr.mark_src_grid();	
 		printf("m=%d\n",m);
 		isum=0;
 		ctr.snapshot(m,isum++,0);
-	//for(it=0; it<ctr.Nt; it++){
-	for(it=0; it<5; it++){
-		printf("it=%d\n",it);
+	for(it=0; it<ctr.Nt; it++){
 		ctr.s2v(it);		// ????????????????  source term management
 		ctr.v2s(it);
 		//ctr.capture(it);

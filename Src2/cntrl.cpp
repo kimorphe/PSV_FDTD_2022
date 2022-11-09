@@ -3,6 +3,8 @@
 #include<math.h>
 #include"fdm2d.h"
 
+#include<sys/stat.h>
+
 void show_msg(char *fn){
 	printf("Cannot find file %s \n",fn);
 	printf(" --> abort process ...\n");
@@ -862,10 +864,16 @@ void CNTRL::fwrite_ary(){
 void CNTRL::snapshot(int n_meas, int isum, int it){
 	//v3.fwrite_trim(n_meas,isum,NHa,NHb,it*dt);
 	char fname[128];
-	//sprintf(fname,"T%d/v%d.out",d_num,isum);
 	sprintf(fname,"T%d/v%d.out",round,isum);
 	FILE *fp=fopen(fname,"w");
-	if(fp==NULL) show_msg(fname);
+	if(fp==NULL){
+		char dir_name[128];
+		sprintf(dir_name,"T%d",round);
+		mkdir(dir_name,0777);
+		printf("Data directory %s has been created. \n",dir_name);
+		fp=fopen(fname,"w");
+		if(fp==NULL) show_msg(fname);
+	}
 
 	int i,j;
 	double xll[2], wdt[2];
