@@ -6,9 +6,9 @@
 # Ndiv[2]
  1400 340
 # Wa[2] (PML, lower left corner)
- 10.0 0.0
+ 0.0 0.0
 # Wb[2] (PML, upper right corner)
- 10.0 0.0
+ 0.0 0.0
 # rho, cL, cT (density & wave velocities)
  2.7 6.00 3.00
 # Ya, Yb (imaging area)

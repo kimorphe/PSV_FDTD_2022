@@ -460,6 +460,7 @@ int CNTRL::find_src_index(FIELD V, int k){
 //
 void CNTRL:: v2s(int it){
 	int i,j,ib,jb;
+	int k,l;
 	double dmpX,dmpY,alph,beta,xx,yy;
 	double dv1,dv2;
 	double dtr=1.0/dt;
@@ -467,13 +468,14 @@ void CNTRL:: v2s(int it){
 	double s110=0.0, s220=0.0;
 
 //		Normal Stress: s11, s22
-	for(i=0; i<Ndiv[0] ;i++){
+	for(k=0;k<s11.Nin;k++){
+		l=s11.kint[k];
+		s11.l2ij(abs(l),&i,&j);
 		xx=Xa[0]+dx[0]*(i+0.5);
-		dmpX=dm.PML_dcy(0,xx); 
-		alph=(dtr-dmpX)/(dtr+dmpX);
-	for(j=0; j<Ndiv[1] ;j++){
 		yy=Xa[1]+dx[1]*(j+0.5);
+		dmpX=dm.PML_dcy(0,xx); 
 		dmpY=dm.PML_dcy(1,yy);
+		alph=(dtr-dmpX)/(dtr+dmpX);
 		beta=(dtr-dmpY)/(dtr+dmpY);
 
 		dv1=(v1.F[i+1][j]-v1.F[i][j])/(dtr+dmpX);
@@ -483,28 +485,28 @@ void CNTRL:: v2s(int it){
 		s11.Fx[i][j]*=alph;
 		s11.Fy[i][j]*=beta;
 		s11.Fx[i][j]+=(dv1*a2m/dx[0]);
-		s11.Fx[i][j]+=(s110*2.*dmpX/(dtr+dmpX)); // <--------------
+		//s11.Fx[i][j]+=(s110*2.*dmpX/(dtr+dmpX)); // <--------------
 		s11.Fy[i][j]+=(dv2*almb/dx[1]);
 		s11.F[i][j]=s11.Fx[i][j]+s11.Fy[i][j];
 
 		s22.Fx[i][j]*=alph;
 		s22.Fy[i][j]*=beta;
 		s22.Fx[i][j]+=(dv1*almb/dx[0]);
-		s22.Fx[i][j]+=(s220*2.*dmpX/(dtr+dmpX)); // <--------------
+		//s22.Fx[i][j]+=(s220*2.*dmpX/(dtr+dmpX)); // <--------------
 		s22.Fy[i][j]+=(dv2*a2m/dx[1]);
 		s22.F[i][j]=s22.Fx[i][j]+s22.Fy[i][j];
-	}
 	}
 
 //		Shear Stress: s12
 
-	for(i=1; i<Ndiv[0]; i++){
+	for(k=0;k<s12.Nin;k++){
+		l=s12.kint[k];
+		s12.l2ij(abs(l),&i,&j);
 		xx=Xa[0]+dx[0]*i;
-		dmpX=dm.PML_dcy(0,xx); 
-		alph=(dtr-dmpX)/(dtr+dmpX);
-	for(j=1; j<Ndiv[1]; j++){
 		yy=Xa[1]+dx[1]*j;
+		dmpX=dm.PML_dcy(0,xx); 
 		dmpY=dm.PML_dcy(1,yy); 
+		alph=(dtr-dmpX)/(dtr+dmpX);
 		beta=(dtr-dmpY)/(dtr+dmpY);
 		
 		dv2=(v2.F[i][j]-v2.F[i-1][j])*amu/(dtr+dmpX);
@@ -516,9 +518,7 @@ void CNTRL:: v2s(int it){
 		s12.Fy[i][j]+=(dv1/dx[1]);
 		s12.F[i][j]=s12.Fx[i][j]+s12.Fy[i][j];
 	}
-	}
 //		Stress Free B.C.	
-	int k,l;
 	for(k=0; k<s12.Nbnd; k++){
 		l=s12.kbnd[k];
 		s12.l2ij(abs(l),&i,&j);
@@ -549,8 +549,8 @@ void CNTRL :: s2v(int itime){
 		yy=Xa[1]+dx[1]*(j+0.5);
 
 		dmpX=dm.PML_dcy(0,xx); 
-		alph=(dtr-dmpX)/(dtr+dmpX);
 		dmpY=dm.PML_dcy(1,yy); 
+		alph=(dtr-dmpX)/(dtr+dmpX);
 		beta=(dtr-dmpY)/(dtr+dmpY);
 
 		dS11=(s11.F[i][j]-s11.F[i-1][j])/((dtr+dmpX)*rdx);
@@ -575,15 +575,13 @@ void CNTRL :: s2v(int itime){
 		dmpY=dm.PML_dcy(1,yy);
 		alph=(dtr-dmpX)/(dtr+dmpX);
 		beta=(dtr-dmpY)/(dtr+dmpY);
-		//dS11=sgn*2.*(s11[i-ib][j]-s110)/((dtr+dmpX)*rdx);
-		//dS11=sgn*2.*(s11.F[i-ib][j]-s110)/((dtr+dmpX)*rdx);
 		sgn=1.0;
 		ib=1;
 		if(v1.nml[k]<0){
 			sgn=-1.0;
 			ib=0;
 		};
-		dS11=-sgn*2.*(s11.F[i-ib][j]-s110)/((dtr+dmpX)*rdx);
+		dS11=1.5*sgn*(s110-s11.F[i-ib][j])/((dtr+dmpX)*rdx);
 		dS12=(s12.F[i][j+1]-s12.F[i][j])/((dtr+dmpY)*rdy);
 		v1.Fx[i][j]*=alph;
 		v1.Fy[i][j]*=beta;
@@ -599,8 +597,8 @@ void CNTRL :: s2v(int itime){
 		xx=Xa[0]+dx[0]*(i+0.5);
 		yy=Xa[1]+dx[1]*j;
 		dmpX=dm.PML_dcy(0,xx); 
-		alph=(dtr-dmpX)/(dtr+dmpX);
 		dmpY=dm.PML_dcy(1,yy); 
+		alph=(dtr-dmpX)/(dtr+dmpX);
 		beta=(dtr-dmpY)/(dtr+dmpY);
 
 		dS12=(s12.F[i+1][j]-s12.F[i][j])/((dtr+dmpX)*rdx);
@@ -619,8 +617,6 @@ void CNTRL :: s2v(int itime){
 		if(v2.ksrc[k]) continue;
 		l=v2.kbnd[k];
 		v2.l2ij(abs(l),&i,&j);
-		sgn=1.0;
-		if(l<0) sgn=-1.0;
 		xx=Xa[0]+dx[0]*(i+0.5);
 		yy=Xa[1]+dx[1]*j;
 		dmpX=dm.PML_dcy(0,xx);
@@ -633,10 +629,8 @@ void CNTRL :: s2v(int itime){
 			sgn=-1.0;
 			jb=0;
 		};
-		//dS12=(s12[i+1][j]-s12[i][j])/((dtr+dmpX)*rdx);
-		//dS22=2.0*sgn*(s22[i][j-jb]-s220)/((dtr+dmpY)*rdy);
 		dS12=(s12.F[i+1][j]-s12.F[i][j])/((dtr+dmpX)*rdx);
-		dS22=-2.0*sgn*(s22.F[i][j-jb]-s220)/((dtr+dmpY)*rdy);
+		dS22=1.5*sgn*(s220-s22.F[i][j-jb])/((dtr+dmpY)*rdy);
 		v2.Fx[i][j]*=alph;
 		v2.Fy[i][j]*=beta;
 		v2.Fx[i][j]+=dS12;
@@ -673,10 +667,8 @@ void CNTRL :: s2v(int itime){
 				if(src.Ctd<0.0) tdly=(k-src.ng+1)*src.Ctd+tdly0;	// negative incident angle
 				//bvl=wvs[iwv].val(itime*dt-tdly)*a0;
 				bvl=wvs[iwv].val(itime*dt-tdly);
-				//q1.F[i][j]=bvl*isgn;
-				//dmpX=dm.PML_dcy(0,xx);
-				//dmpY=dm.PML_dcy(1,yy);
-				dmpX=0.0; dmpY=0.0;
+				dmpX=0.0; 
+				dmpY=0.0;
 				alph=(dtr-dmpX)/(dtr+dmpX);
 				beta=(dtr-dmpY)/(dtr+dmpY);
 				dS11=isgn*2.*(bvl-s11.F[i-ib][j])/((dtr+dmpX)*rdx);
@@ -696,15 +688,12 @@ void CNTRL :: s2v(int itime){
 				if(src.Ctd<0.0) tdly=(k-src.ng+1)*src.Ctd+tdly0;	// negative incident angle
 				//bvl=wvs[iwv].val(itime*dt-tdly)*a0;
 				bvl=wvs[iwv].val(itime*dt-tdly);
-				//q2.F[i][j]=bvl*isgn;
-				//dmpX=dm.PML_dcy(0,xx);
-				//dmpY=dm.PML_dcy(1,yy);
 				dmpX=0.0;
 				dmpY=0.0;
 				alph=(dtr-dmpX)/(dtr+dmpX);
 				beta=(dtr-dmpY)/(dtr+dmpY);
 				dS12=(s12.F[i+1][j]-s12.F[i][j])/((dtr+dmpX)*rdx);
-				dS22=2.0*sgn*(bvl-s22.F[i][j-jb])/((dtr+dmpY)*rdy);
+				dS22=isgn*2.*(bvl-s22.F[i][j-ib])/((dtr+dmpY)*rdy);
 				v2.Fx[i][j]*=alph;
 				v2.Fy[i][j]*=beta;
 				v2.Fx[i][j]+=dS12;

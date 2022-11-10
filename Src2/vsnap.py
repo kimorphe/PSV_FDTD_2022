@@ -58,8 +58,8 @@ class Vfld:
 		fp.readline();
 		tmp=fp.readline().lstrip().split(",");
 		self.Ng=list(map(int,tmp));
-		print("xlim=",self.xlim)
-		print("ylim=",self.ylim)
+		#print("xlim=",self.xlim)
+		#print("ylim=",self.ylim)
 
 		fp.readline();
 
@@ -120,6 +120,7 @@ if __name__=="__main__":
         fname="v"+str(k)+".out";
         print(fname)
         vf=Vfld(fname);
+        print(np.max(vf.v[:,:]))
         #vf.v-=10*vmsk.mk
         if isum==0:
             img=vf.draw1(ax,cmap="jet",Fac=Fac,vmax=1.0);
